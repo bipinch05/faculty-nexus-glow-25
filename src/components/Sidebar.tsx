@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Home, Star, Chat, Filter, Users, BookOpen, Calendar, Settings } from 'lucide-react';
+import { Home, Star, MessageCircle, Filter, Users, BookOpen, Calendar, Settings } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 
@@ -15,7 +14,7 @@ const Sidebar = ({ isOpen, onClose, activeTab, onTabChange }: SidebarProps) => {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: Home, count: null },
     { id: 'top-rated', label: 'Top Rated', icon: Star, count: 15 },
-    { id: 'most-discussed', label: 'Most Discussed', icon: Chat, count: 8 },
+    { id: 'most-discussed', label: 'Most Discussed', icon: MessageCircle, count: 8 },
     { id: 'my-reviews', label: 'My Reviews', icon: Users, count: 12 },
     { id: 'subjects', label: 'Subjects', icon: BookOpen, count: null },
     { id: 'schedule', label: 'Schedule', icon: Calendar, count: null },
