@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { Star, TrendingUp, Users, MessageCircle, Filter, X } from 'lucide-react';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@radix-ui/react-select';
 
 const Index = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -16,6 +17,9 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFaculty, setSelectedFaculty] = useState(null);
   const [showChat, setShowChat] = useState(false);
+  const [filterSubject, setFilterSubject] = useState('');
+  const [filterSection, setFilterSection] = useState('');
+  const [filterRating, setFilterRating] = useState('');
 
   const mockFaculties = [
     {
@@ -100,11 +104,19 @@ const Index = () => {
     }
   ];
 
-  const filteredFaculties = mockFaculties.filter(faculty => 
-    faculty.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    faculty.subjects.some(subject => subject.toLowerCase().includes(searchQuery.toLowerCase())) ||
-    faculty.department.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredFaculties = mockFaculties.filter(faculty => {
+    const matchesSearch = faculty.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      faculty.subjects.some(subject => subject.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      faculty.department.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesSubject = filterSubject === '' || faculty.subjects.includes(filterSubject);
+    const matchesSection = filterSection === '' || faculty.sections.includes(filterSection);
+    const matchesRating = filterRating === '' || 
+      (filterRating === '4+' && faculty.rating >= 4) ||
+      (filterRating === '4.5+' && faculty.rating >= 4.5);
+    
+    return matchesSearch && matchesSubject && matchesSection && matchesRating;
+  });
 
   const topRatedFaculties = [...mockFaculties].sort((a, b) => b.rating - a.rating).slice(0, 3);
   const trendingFaculties = [...mockFaculties].sort((a, b) => (b.likes + Math.random() * 50) - (a.likes + Math.random() * 50)).slice(0, 3);
@@ -174,6 +186,70 @@ const Index = () => {
         </Card>
       </div>
 
+      {/* Advanced Filters */}
+      <Card className="glass border-white/10">
+        <CardContent className="p-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <Select value={filterSubject} onValueChange={setFilterSubject}>
+              <SelectTrigger className="glass border-white/20 text-white">
+                <SelectValue placeholder="Filter by Subject" />
+              </SelectTrigger>
+              <SelectContent className="glass border-white/20">
+                <SelectItem value="">All Subjects</SelectItem>
+                <SelectItem value="Data Structures">Data Structures</SelectItem>
+                <SelectItem value="Algorithms">Algorithms</SelectItem>
+                <SelectItem value="Machine Learning">Machine Learning</SelectItem>
+                <SelectItem value="Database Systems">Database Systems</SelectItem>
+                <SelectItem value="Computer Networks">Computer Networks</SelectItem>
+                <SelectItem value="Operating Systems">Operating Systems</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={filterSection} onValueChange={setFilterSection}>
+              <SelectTrigger className="glass border-white/20 text-white">
+                <SelectValue placeholder="Filter by Section" />
+              </SelectTrigger>
+              <SelectContent className="glass border-white/20">
+                <SelectItem value="">All Sections</SelectItem>
+                <SelectItem value="CSE 2A">CSE 2A</SelectItem>
+                <SelectItem value="CSE 2B">CSE 2B</SelectItem>
+                <SelectItem value="CSE 3A">CSE 3A</SelectItem>
+                <SelectItem value="CSE 3B">CSE 3B</SelectItem>
+                <SelectItem value="CSE 3C">CSE 3C</SelectItem>
+                <SelectItem value="CSE 4A">CSE 4A</SelectItem>
+                <SelectItem value="CSE 4B">CSE 4B</SelectItem>
+                <SelectItem value="CSE 4C">CSE 4C</SelectItem>
+                <SelectItem value="CSE 4D">CSE 4D</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={filterRating} onValueChange={setFilterRating}>
+              <SelectTrigger className="glass border-white/20 text-white">
+                <SelectValue placeholder="Filter by Rating" />
+              </SelectTrigger>
+              <SelectContent className="glass border-white/20">
+                <SelectItem value="">All Ratings</SelectItem>
+                <SelectItem value="4+">4+ Stars</SelectItem>
+                <SelectItem value="4.5+">4.5+ Stars</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Button 
+              variant="outline" 
+              className="border-white/20 text-white hover:bg-white/10"
+              onClick={() => {
+                setFilterSubject('');
+                setFilterSection('');
+                setFilterRating('');
+                setSearchQuery('');
+              }}
+            >
+              Clear Filters
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Quick Actions */}
       <div className="flex flex-wrap gap-3">
         <Button 
@@ -192,6 +268,24 @@ const Index = () => {
           View Analytics
         </Button>
       </div>
+
+      {/* Results Summary */}
+      {(filterSubject || filterSection || filterRating || searchQuery) && (
+        <Card className="glass border-white/10">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <span className="text-white">
+                Found {filteredFaculties.length} faculty{filteredFaculties.length !== 1 ? 'ies' : ''} matching your criteria
+              </span>
+              <div className="flex space-x-2">
+                {filterSubject && <Badge className="bg-kiit-blue/20 text-kiit-blue">Subject: {filterSubject}</Badge>}
+                {filterSection && <Badge className="bg-kiit-purple/20 text-kiit-purple">Section: {filterSection}</Badge>}
+                {filterRating && <Badge className="bg-kiit-orange/20 text-kiit-orange">Rating: {filterRating}</Badge>}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Top Rated Section */}
       <Card className="glass border-white/10">
@@ -223,18 +317,28 @@ const Index = () => {
       {/* All Faculties */}
       <Card className="glass border-white/10">
         <CardHeader>
-          <CardTitle className="text-white">All Faculties</CardTitle>
+          <CardTitle className="text-white">
+            {(filterSubject || filterSection || filterRating || searchQuery) ? 'Filtered Results' : 'All Faculties'}
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
-            {filteredFaculties.map(faculty => (
-              <FacultyCard 
-                key={faculty.id} 
-                faculty={faculty} 
-                onViewDetails={setSelectedFaculty}
-              />
-            ))}
-          </div>
+          {filteredFaculties.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+              {filteredFaculties.map(faculty => (
+                <FacultyCard 
+                  key={faculty.id} 
+                  faculty={faculty} 
+                  onViewDetails={setSelectedFaculty}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-white text-lg font-semibold mb-2">No faculties found</h3>
+              <p className="text-gray-400">Try adjusting your filters or search terms.</p>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
