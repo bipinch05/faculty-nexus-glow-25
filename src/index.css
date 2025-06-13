@@ -59,6 +59,7 @@
     @apply bg-kiit-dark text-foreground font-inter;
     background: linear-gradient(135deg, #0A0B0F 0%, #050609 50%, #0A0B0F 100%);
     background-attachment: fixed;
+    overflow-x: hidden;
   }
 }
 
@@ -94,11 +95,30 @@
   .font-poppins {
     font-family: 'Poppins', sans-serif;
   }
+
+  /* Chat specific animations */
+  .animate-scale-in {
+    animation: scale-in 0.2s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.3s ease-out;
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+  }
+
+  /* Smooth scrolling */
+  .smooth-scroll {
+    scroll-behavior: smooth;
+  }
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -113,4 +133,59 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #7C3AED, #06B6D4);
+}
+
+/* Additional chat animations */
+@keyframes scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-up {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive text scaling */
+@media (max-width: 768px) {
+  .responsive-text {
+    @apply text-sm;
+  }
+}
+
+/* Improved focus states */
+input:focus, textarea:focus, button:focus {
+  outline: 2px solid theme('colors.kiit.blue');
+  outline-offset: 2px;
+}
+
+/* Better mobile tap targets */
+@media (max-width: 768px) {
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }

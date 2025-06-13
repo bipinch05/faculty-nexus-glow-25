@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
@@ -9,7 +8,7 @@ import FacultyDetails from '../components/FacultyDetails';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
-import { Star, TrendingUp, Users, MessageCircle, Filter } from 'lucide-react';
+import { Star, TrendingUp, Users, MessageCircle, Filter, X } from 'lucide-react';
 
 const Index = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -114,6 +113,7 @@ const Index = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setSelectedFaculty(null);
+        setShowChat(false);
       }
     };
 
@@ -124,14 +124,14 @@ const Index = () => {
   const renderDashboard = () => (
     <div className="space-y-6">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="glass border-white/10 card-hover">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Users className="w-8 h-8 text-kiit-blue" />
+              <Users className="w-6 h-6 lg:w-8 lg:h-8 text-kiit-blue" />
               <div>
-                <p className="text-2xl font-bold text-white">89</p>
-                <p className="text-sm text-gray-400">Total Faculties</p>
+                <p className="text-lg lg:text-2xl font-bold text-white">89</p>
+                <p className="text-xs lg:text-sm text-gray-400">Total Faculties</p>
               </div>
             </div>
           </CardContent>
@@ -140,10 +140,10 @@ const Index = () => {
         <Card className="glass border-white/10 card-hover">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Star className="w-8 h-8 text-kiit-orange" />
+              <Star className="w-6 h-6 lg:w-8 lg:h-8 text-kiit-orange" />
               <div>
-                <p className="text-2xl font-bold text-white">1,247</p>
-                <p className="text-sm text-gray-400">Total Reviews</p>
+                <p className="text-lg lg:text-2xl font-bold text-white">1,247</p>
+                <p className="text-xs lg:text-sm text-gray-400">Total Reviews</p>
               </div>
             </div>
           </CardContent>
@@ -152,10 +152,10 @@ const Index = () => {
         <Card className="glass border-white/10 card-hover">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <TrendingUp className="w-8 h-8 text-kiit-green" />
+              <TrendingUp className="w-6 h-6 lg:w-8 lg:h-8 text-kiit-green" />
               <div>
-                <p className="text-2xl font-bold text-white">4.6</p>
-                <p className="text-sm text-gray-400">Avg Rating</p>
+                <p className="text-lg lg:text-2xl font-bold text-white">4.6</p>
+                <p className="text-xs lg:text-sm text-gray-400">Avg Rating</p>
               </div>
             </div>
           </CardContent>
@@ -164,10 +164,10 @@ const Index = () => {
         <Card className="glass border-white/10 card-hover">
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <MessageCircle className="w-8 h-8 text-kiit-purple" />
+              <MessageCircle className="w-6 h-6 lg:w-8 lg:h-8 text-kiit-purple" />
               <div>
-                <p className="text-2xl font-bold text-white">156</p>
-                <p className="text-sm text-gray-400">Active Chats</p>
+                <p className="text-lg lg:text-2xl font-bold text-white">156</p>
+                <p className="text-xs lg:text-sm text-gray-400">Active Chats</p>
               </div>
             </div>
           </CardContent>
@@ -175,7 +175,7 @@ const Index = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-3">
         <Button 
           onClick={() => setShowChat(!showChat)}
           className="btn-gradient"
@@ -202,7 +202,7 @@ const Index = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {topRatedFaculties.map((faculty, index) => (
               <div key={faculty.id} className="relative">
                 {index === 0 && (
@@ -226,7 +226,7 @@ const Index = () => {
           <CardTitle className="text-white">All Faculties</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
             {filteredFaculties.map(faculty => (
               <FacultyCard 
                 key={faculty.id} 
@@ -249,7 +249,7 @@ const Index = () => {
               <CardTitle className="text-gradient">Top Rated Faculties</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {topRatedFaculties.map(faculty => (
                   <FacultyCard 
                     key={faculty.id} 
@@ -268,7 +268,7 @@ const Index = () => {
               <CardTitle className="text-gradient">Most Discussed Faculties</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {trendingFaculties.map(faculty => (
                   <FacultyCard 
                     key={faculty.id} 
@@ -287,7 +287,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-kiit-darker">
-      <div className="flex w-full">
+      <div className="flex w-full h-screen overflow-hidden">
         <Sidebar 
           isOpen={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
@@ -295,22 +295,39 @@ const Index = () => {
           onTabChange={setActiveTab}
         />
         
-        <div className="flex-1 flex flex-col min-h-screen">
+        <div className="flex-1 flex flex-col min-h-0">
           <Header 
             onMenuClick={() => setSidebarOpen(true)}
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
           />
           
-          <main className="flex-1 p-6">
-            <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 h-full">
-              <div className={`${showChat ? 'xl:col-span-3' : 'xl:col-span-4'} transition-all duration-300`}>
-                {renderContent()}
+          <main className="flex-1 overflow-hidden">
+            <div className="h-full flex">
+              <div className={`transition-all duration-300 ease-in-out overflow-auto ${
+                showChat ? 'w-0 lg:w-2/3' : 'w-full'
+              }`}>
+                <div className="p-4 lg:p-6">
+                  {renderContent()}
+                </div>
               </div>
               
               {showChat && (
-                <div className="xl:col-span-1">
-                  <ChatSystem />
+                <div className="w-full lg:w-1/3 border-l border-white/10 bg-kiit-darker/50 flex flex-col">
+                  <div className="p-3 border-b border-white/10 flex items-center justify-between bg-kiit-darker/80">
+                    <h3 className="text-white font-semibold">Faculty Chat</h3>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setShowChat(false)}
+                      className="text-gray-400 hover:text-white lg:hidden"
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  <div className="flex-1 overflow-hidden">
+                    <ChatSystem />
+                  </div>
                 </div>
               )}
             </div>
