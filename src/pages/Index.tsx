@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { Star, TrendingUp, Users, MessageCircle, Filter, X } from 'lucide-react';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@radix-ui/react-select';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../components/ui/select';
 
 const Index = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -17,9 +17,9 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFaculty, setSelectedFaculty] = useState(null);
   const [showChat, setShowChat] = useState(false);
-  const [filterSubject, setFilterSubject] = useState('');
-  const [filterSection, setFilterSection] = useState('');
-  const [filterRating, setFilterRating] = useState('');
+  const [filterSubject, setFilterSubject] = useState('all');
+  const [filterSection, setFilterSection] = useState('all');
+  const [filterRating, setFilterRating] = useState('all');
 
   const mockFaculties = [
     {
@@ -109,9 +109,9 @@ const Index = () => {
       faculty.subjects.some(subject => subject.toLowerCase().includes(searchQuery.toLowerCase())) ||
       faculty.department.toLowerCase().includes(searchQuery.toLowerCase());
     
-    const matchesSubject = filterSubject === '' || faculty.subjects.includes(filterSubject);
-    const matchesSection = filterSection === '' || faculty.sections.includes(filterSection);
-    const matchesRating = filterRating === '' || 
+    const matchesSubject = filterSubject === 'all' || faculty.subjects.includes(filterSubject);
+    const matchesSection = filterSection === 'all' || faculty.sections.includes(filterSection);
+    const matchesRating = filterRating === 'all' || 
       (filterRating === '4+' && faculty.rating >= 4) ||
       (filterRating === '4.5+' && faculty.rating >= 4.5);
     
@@ -195,7 +195,7 @@ const Index = () => {
                 <SelectValue placeholder="Filter by Subject" />
               </SelectTrigger>
               <SelectContent className="glass border-white/20">
-                <SelectItem value="">All Subjects</SelectItem>
+                <SelectItem value="all">All Subjects</SelectItem>
                 <SelectItem value="Data Structures">Data Structures</SelectItem>
                 <SelectItem value="Algorithms">Algorithms</SelectItem>
                 <SelectItem value="Machine Learning">Machine Learning</SelectItem>
@@ -210,7 +210,7 @@ const Index = () => {
                 <SelectValue placeholder="Filter by Section" />
               </SelectTrigger>
               <SelectContent className="glass border-white/20">
-                <SelectItem value="">All Sections</SelectItem>
+                <SelectItem value="all">All Sections</SelectItem>
                 <SelectItem value="CSE 2A">CSE 2A</SelectItem>
                 <SelectItem value="CSE 2B">CSE 2B</SelectItem>
                 <SelectItem value="CSE 3A">CSE 3A</SelectItem>
@@ -228,7 +228,7 @@ const Index = () => {
                 <SelectValue placeholder="Filter by Rating" />
               </SelectTrigger>
               <SelectContent className="glass border-white/20">
-                <SelectItem value="">All Ratings</SelectItem>
+                <SelectItem value="all">All Ratings</SelectItem>
                 <SelectItem value="4+">4+ Stars</SelectItem>
                 <SelectItem value="4.5+">4.5+ Stars</SelectItem>
               </SelectContent>
@@ -238,9 +238,9 @@ const Index = () => {
               variant="outline" 
               className="border-white/20 text-white hover:bg-white/10"
               onClick={() => {
-                setFilterSubject('');
-                setFilterSection('');
-                setFilterRating('');
+                setFilterSubject('all');
+                setFilterSection('all');
+                setFilterRating('all');
                 setSearchQuery('');
               }}
             >
@@ -270,7 +270,7 @@ const Index = () => {
       </div>
 
       {/* Results Summary */}
-      {(filterSubject || filterSection || filterRating || searchQuery) && (
+      {(filterSubject !== 'all' || filterSection !== 'all' || filterRating !== 'all' || searchQuery) && (
         <Card className="glass border-white/10">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -278,9 +278,9 @@ const Index = () => {
                 Found {filteredFaculties.length} faculty{filteredFaculties.length !== 1 ? 'ies' : ''} matching your criteria
               </span>
               <div className="flex space-x-2">
-                {filterSubject && <Badge className="bg-kiit-blue/20 text-kiit-blue">Subject: {filterSubject}</Badge>}
-                {filterSection && <Badge className="bg-kiit-purple/20 text-kiit-purple">Section: {filterSection}</Badge>}
-                {filterRating && <Badge className="bg-kiit-orange/20 text-kiit-orange">Rating: {filterRating}</Badge>}
+                {filterSubject !== 'all' && <Badge className="bg-kiit-blue/20 text-kiit-blue">Subject: {filterSubject}</Badge>}
+                {filterSection !== 'all' && <Badge className="bg-kiit-purple/20 text-kiit-purple">Section: {filterSection}</Badge>}
+                {filterRating !== 'all' && <Badge className="bg-kiit-orange/20 text-kiit-orange">Rating: {filterRating}</Badge>}
               </div>
             </div>
           </CardContent>
@@ -318,7 +318,7 @@ const Index = () => {
       <Card className="glass border-white/10">
         <CardHeader>
           <CardTitle className="text-white">
-            {(filterSubject || filterSection || filterRating || searchQuery) ? 'Filtered Results' : 'All Faculties'}
+            {(filterSubject !== 'all' || filterSection !== 'all' || filterRating !== 'all' || searchQuery) ? 'Filtered Results' : 'All Faculties'}
           </CardTitle>
         </CardHeader>
         <CardContent>
