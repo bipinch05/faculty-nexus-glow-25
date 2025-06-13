@@ -68,7 +68,7 @@ const ChatSystem = () => {
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterSection, setFilterSection] = useState('');
+  const [filterSection, setFilterSection] = useState('all');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const mockFaculties = [
@@ -177,7 +177,7 @@ const ChatSystem = () => {
       msg.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
       msg.user.toLowerCase().includes(searchQuery.toLowerCase());
     
-    const matchesSection = filterSection === '' || 
+    const matchesSection = filterSection === 'all' || 
       (msg.mentionedFaculty && msg.mentionedFaculty.sections.includes(filterSection));
     
     return matchesSearch && matchesSection;
@@ -219,7 +219,7 @@ const ChatSystem = () => {
               <SelectValue placeholder="Section" />
             </SelectTrigger>
             <SelectContent className="glass border-white/20">
-              <SelectItem value="">All</SelectItem>
+              <SelectItem value="all">All</SelectItem>
               <SelectItem value="CSE 2A">CSE 2A</SelectItem>
               <SelectItem value="CSE 2B">CSE 2B</SelectItem>
               <SelectItem value="CSE 3A">CSE 3A</SelectItem>
